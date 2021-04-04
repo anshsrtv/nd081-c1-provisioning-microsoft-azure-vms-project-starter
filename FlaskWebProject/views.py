@@ -70,6 +70,7 @@ def login():
             app.logger.info('Invalid login attempt')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
+        app.logger.info('%s logged in successfully', user.username)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('home')
@@ -98,7 +99,6 @@ def authorized():
         # Here, we'll use the admin username for anyone who is authenticated by MS
         user = User.query.filter_by(username="admin").first()
         login_user(user)
-        app.logger.info('%s logged in successfully', user.username)
         _save_cache(cache)
     return redirect(url_for('home'))
 
